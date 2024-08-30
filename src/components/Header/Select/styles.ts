@@ -23,6 +23,11 @@ export const SelectContainer = styled.div`
     position: relative;
   }
 
+  #state-select:has(input:focus){
+    box-shadow: 0 0 0 2px ${({ theme }) => theme["purple-dark"]};
+    border-radius: 6px;
+  }
+
   #options {
     display: none;
 
