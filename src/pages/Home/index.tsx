@@ -3,6 +3,10 @@ import { HeroContainer, HomeContainer } from "./styles";
 
 import heroImage from '../../assets/hero-image.png'
 
+import { coffeesInStorage } from '../../utils'
+
+import { Card } from "./Card";
+
 export function Home() {
   return (
     <HomeContainer>
@@ -16,25 +20,25 @@ export function Home() {
           <div className="items-wrapper">
             <div>
               <div className="item">
-                <div><ShoppingCart size={22} weight="fill" /></div>
+                <div className="cartIcon"><ShoppingCart weight="fill" /></div>
                 <span>Compra simples e segura</span>
               </div>
 
               <div className="item">
-                <div><Timer size={22} weight="fill" /></div>
+                <div className="timerIcon"><Timer weight="fill" /></div>
                 <span>Entrega rápida e rastreada</span>
               </div>
             </div>
 
             <div>
               <div className="item">
-                <div><Package size={22} weight="fill" /></div>
+                <div className="packageIcon"><Package weight="fill" /></div>
                 <span>Embalagem mantém o café intacto</span>
               </div>
 
 
               <div className="item">
-                <div><Coffee size={22} weight="fill" /></div>
+                <div className="coffeeIcon"><Coffee weight="fill" /></div>
                 <span>O café chega fresquinho até você</span>
               </div>
             </div>
@@ -43,6 +47,25 @@ export function Home() {
 
         <img src={heroImage} alt="" />
       </HeroContainer>
+      
+      <section>
+        <h3>Nossos cafés</h3>
+
+        <div className="cards-wrapper">
+        {coffeesInStorage.map((coffee) => {
+          const { id, name, description, image, price, type} = coffee
+          return (
+            <Card 
+            key={id} 
+            name={name} 
+            description={description} 
+            image={image} 
+            price={price} 
+            type={type}/>
+          )
+        })}
+        </div>
+      </section>
     </HomeContainer>
   )
 }
