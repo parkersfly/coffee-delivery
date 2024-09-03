@@ -88,6 +88,10 @@ export const CardContainer = styled.div`
         &:focus {
           box-shadow: 0 0 0 2px ${({ theme }) => theme["purple"]};
         }
+
+        &:hover {
+          background-color:${({ theme }) => theme["purple"]};
+        }
       }
     }
 

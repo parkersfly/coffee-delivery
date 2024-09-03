@@ -13,7 +13,7 @@ export const SelectContainer = styled.div`
     border-radius: 6px;
     background-color: ${({ theme }) => theme["purple-light"]};
   }
-
+  
   #selected-value {
     font-size: 1.4rem;
     color: ${({ theme }) => theme["purple-dark"]};

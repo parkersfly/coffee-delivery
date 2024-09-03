@@ -5,7 +5,7 @@ import heroImage from '../../assets/hero-image.png'
 
 import { coffeesInStorage } from '../../utils'
 
-import { Card } from "./Card";
+import { Card } from "./Catalog-card";
 
 export function Home() {
   return (

@@ -5,7 +5,7 @@ interface CardProps {
   name: string
   description: string
   type: string[]
-  price: number
+  price: string
   image: string
 }
 
