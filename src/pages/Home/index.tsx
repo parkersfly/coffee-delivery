@@ -6,6 +6,7 @@ import heroImage from '../../assets/hero-image.png'
 import { coffeesInStorage } from '../../utils'
 
 import { Card } from "./Catalog-card";
+import { Icon } from "../../components/Icon";
 
 export function Home() {
   return (
@@ -20,25 +21,25 @@ export function Home() {
           <div className="items-wrapper">
             <div>
               <div className="item">
-                <div className="cartIcon"><ShoppingCart weight="fill" /></div>
+                <Icon iconSVG={ShoppingCart} weight="fill" variant="tertiary"/>
                 <span>Compra simples e segura</span>
               </div>
 
               <div className="item">
-                <div className="timerIcon"><Timer weight="fill" /></div>
+                <Icon iconSVG={Timer} weight="fill" variant="secondary"/>
                 <span>Entrega rápida e rastreada</span>
               </div>
             </div>
 
             <div>
               <div className="item">
-                <div className="packageIcon"><Package weight="fill" /></div>
+               <Icon iconSVG={Package} weight="fill" variant="quaternary"/>
                 <span>Embalagem mantém o café intacto</span>
               </div>
 
 
               <div className="item">
-                <div className="coffeeIcon"><Coffee weight="fill" /></div>
+                <Icon iconSVG={Coffee} weight="fill" />
                 <span>O café chega fresquinho até você</span>
               </div>
             </div>
