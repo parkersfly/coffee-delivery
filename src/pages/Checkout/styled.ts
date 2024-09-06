@@ -1,10 +1,12 @@
 import styled from "styled-components";
 
 export const CheckoutContainer = styled.div`
-  display: flex;
-  gap: 3.2rem;
+    margin-top: 4rem;
 
-  margin-top: 4rem;
+  > form {
+    display: flex;
+    gap: 3.2rem;
+  }
 
   .complete-your-order,
   .coffees-selected {
@@ -60,6 +62,22 @@ export const CheckoutContainer = styled.div`
     flex-direction: column;
     gap: 1.2rem;
 
+    input {
+      width: 100%;
+      height: 4.2rem;
+      padding: 1.2rem;
+      border-radius: 4px;
+      background-color: ${({ theme }) => theme["base-input"]};
+      border: 1px solid ${({ theme }) => theme["base-button"]};
+      box-shadow: none;    
+      font-size: 1.4rem;
+      color: ${({ theme }) => theme["base-label"]};
+
+      &:focus {
+        box-shadow: 0 0 0 2px ${({ theme }) => theme["yellow-dark"]};
+      }
+    }
+
     > div {
       display: flex;
       gap: 1.2rem;
@@ -70,18 +88,45 @@ export const CheckoutContainer = styled.div`
     }
 
     .wrapper1 {
-      div:nth-child(1){
-        flex-shrink: 1.4;
+      > div {
+        width: 100%;
+        display: flex;
+        align-items: center;
+
+        border-radius: 4px;
+        padding: 1.2rem;
+
+        background-color: ${({ theme }) => theme["base-input"]};
+        border: 1px solid ${({ theme }) => theme["base-button"]};
+
+        &:has(input:focus) {
+          box-shadow: 0 0 0 2px ${({ theme }) => theme["yellow-dark"]};
+        }
+
+        input {
+          background-color: transparent;
+          border: transparent;
+          height: 100%;
+          padding: 0;
+
+          &:focus {
+            box-shadow: none;
+          }
+        }
+
+        span {
+          font-size: 1.2rem;
+          color: ${({ theme }) => theme["base-label"]};
+        }
       }
     }
 
     .wrapper2 {
-      div:nth-child(3){
+      input:nth-child(3){
         flex-basis: content;
       }
     }
   }
-
 
   .payment-options {
     display: flex;

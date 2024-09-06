@@ -1,5 +1,6 @@
 import { Minus, Plus, ShoppingCart } from '@phosphor-icons/react'
 import { CardContainer } from './styles'
+import { useState } from 'react'
 
 interface CardProps {
   name: string
@@ -9,13 +10,27 @@ interface CardProps {
   image: string
 }
 
-export function Card({ name, description, image, type, price }:CardProps){
+export function Card({ name, description, image, type, price, ...rest }:CardProps){
+  const [amountOfCoffeesToAdd, setAmountOfCoffeesToAdd] = useState(1)
+
+  function handleAddCoffeeToCart(){
+    if(amountOfCoffeesToAdd < 10){
+      setAmountOfCoffeesToAdd(prevstate => prevstate + 1)
+    }
+  }
+
+  function handleRemoveCoffeeToCart(){
+    if(amountOfCoffeesToAdd > 1) {
+      setAmountOfCoffeesToAdd(prevstate => prevstate - 1)
+    }
+  }
+
   return(
     <CardContainer>
       <div className="coffeeIMG"><img src={image} alt="" /></div>
 
       <div className='tags-wrapper'>
-        { type.map((coffeeType) => {
+        {type.map((coffeeType) => {
           return(
             <span>{coffeeType}</span>
           )
@@ -33,12 +48,12 @@ export function Card({ name, description, image, type, price }:CardProps){
 
         <div className="buy">
           <div className="buy-count">
-            <button><Minus size={14}/></button>
-            <span>1</span>
-            <button><Plus size={14}/></button>
+            <button onClick={() => handleRemoveCoffeeToCart()}><Minus size={14}/></button>
+            <span>{amountOfCoffeesToAdd}</span>
+            <button onClick={() => handleAddCoffeeToCart()}><Plus size={14}/></button>
           </div>
 
-          <button>
+          <button {...rest}>
             <ShoppingCart size={22} fill="#F3F2F2" weight="fill"/>
           </button>
         </div>

@@ -1,12 +1,53 @@
 import { Bank, CreditCard, CurrencyDollarSimple, MapPinLine, Money } from "@phosphor-icons/react";
 import { CheckoutContainer } from "./styled";
-// import { useForm } from "react-hook-form";
 import { CartCard } from "./Cart-card";
-import { Input } from "./Input";
 import { useNavigate } from "react-router-dom";
 
+import { useForm } from "react-hook-form";
+import { zodResolver } from '@hookform/resolvers/zod'
+import * as zod from 'zod'
+import { useState } from "react";
+
+const newAddressDeliveryFormValidationSchema = zod.object({
+  cep: zod
+  .number({
+    required_error: "É obrigatório informar o CEP",
+    invalid_type_error: "CEP must be a number",
+  })
+  .min(8, { message: "Informe os 8 dígitos do CEP" }),
+  street: zod.string().min(1, "Informe o nome da rua"),
+  streetNumber: zod.number().min(1),
+  complement: zod.string().optional(),
+  neighborhood: zod.string().min(1),
+  city: zod.string().min(1),
+  uf: zod.string().min(2)
+})
+
+type NewAddressDeliveryFormData = zod.infer<typeof newAddressDeliveryFormValidationSchema>
+
+interface AddressDelivery {
+  cep: number,
+  street: string,
+  streetNumber: number,
+  complement?: string,
+  neighborhood: string,
+  city: string,
+  uf: string,
+}
+
 export function Checkout(){
-  // const { register, handleSubmit } = useForm()
+  const [addressDelivery, setAddressDelivery] = useState<AddressDelivery>({
+    cep: 0,
+    street: "",
+    streetNumber: 0,
+    neighborhood: "",
+    city: "",
+    uf: "",
+  })
+
+  const { register, handleSubmit, reset } = useForm<NewAddressDeliveryFormData>({
+    resolver: zodResolver(newAddressDeliveryFormValidationSchema),
+  })
 
   const navigate = useNavigate()
 
@@ -14,8 +55,25 @@ export function Checkout(){
     navigate("/success")
   }
 
+  function handleAddNewAddress(data: NewAddressDeliveryFormData){
+    const newAddressDelivery: AddressDelivery = {
+      cep: data.cep,
+      city: data.city,
+      neighborhood: data.neighborhood,
+      street: data.street,
+      streetNumber: data.streetNumber,
+      uf: data.uf,
+      complement: data.complement,
+    }
+
+    setAddressDelivery(newAddressDelivery)
+    
+    reset()
+  }
+
   return (
     <CheckoutContainer>
+      <form onSubmit={handleSubmit(handleAddNewAddress)} action="">
         <div className="complete-your-order">
           <strong>Complete seu pedido</strong>
 
@@ -29,21 +87,24 @@ export function Checkout(){
               </div>
             </div>
 
-            <form className="address-inputs-wrapper">
-              <Input type="number" placeholder="CEP"/>
-              <Input type="text" placeholder="Rua"/>
+            <div className="address-inputs-wrapper" onSubmit={handleSubmit(handleAddNewAddress)}>
+              <input type="number" placeholder="CEP" {...register("cep", { valueAsNumber: true })}/>
+              <input type="text" placeholder="Rua" {...register("street")}/>
 
               <div className="wrapper1">
-                <Input type="number" placeholder="Número"/>
-                <Input type="text" placeholder="Complemento" isOptional/>
+                <input type="number" placeholder="Número" {...register("streetNumber", { valueAsNumber: true })}/>
+                <div>
+                  <input type="text" placeholder="Complemento" {...register("complement")}/>
+                  <span>Opcional</span>
+                </div>
               </div>
 
               <div className="wrapper2">
-                <Input type="text" placeholder="Bairro"/>
-                <Input type="text" placeholder="Cidade"/>
-                <Input type="text" placeholder="UF"/>
+                <input type="text" placeholder="Bairro" {...register("neighborhood")}/>
+                <input type="text" placeholder="Cidade" {...register("city")}/>
+                <input type="text" placeholder="UF" {...register("uf")}/>                
               </div>
-            </form>
+            </div>
           </section>
 
           <section className="checkout-payment-options">
@@ -101,9 +162,10 @@ export function Checkout(){
               </div>
             </div>
 
-            <button onClick={() => handleNextToPageSuccess()}>CONFIRMAR PEDIDO</button>
+            <button type="submit" >CONFIRMAR PEDIDO</button>
           </section>
         </div>
+      </form>
     </CheckoutContainer>
   )
 }
