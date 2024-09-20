@@ -1,27 +1,42 @@
 import { Minus, Plus, Trash } from '@phosphor-icons/react'
 import { CardCardContainer } from './styles'
+import { useBuy } from '../../../contexts/BuyContext'
+import { useState } from 'react'
 
-import expresso from "../../../assets/expresso.png"
+interface CartCardProps {
+  data: {
+    image: string
+    name: string
+    price: string
+    quantity: number
+  }
+}
 
-// interface CartCardProps {
-//   image: string
-//   name: string
-//   price: string
-// }
+export function CartCard({ data }: CartCardProps){
+  const { image, name, price, quantity } = data
 
-export function CartCard(/*{ image, name, price }: CartCardProps*/){
+  const [quantityDisplay, setQuantityDisplay] = useState(quantity)
+
+  function addCoffeeQuantity(){
+    setQuantityDisplay(prevState => prevState + 1)
+  }
+
+  function removeCoffeeQuantity(){
+    setQuantityDisplay(prevState => prevState - 1)
+  }
+
   return(
     <CardCardContainer>
-        <img src={expresso} alt="" className='coffee-image' />
+        <img src={image} alt="" className='coffee-image' />
 
         <div className='card-item-info'>
-          <p>Expresso Tradicional</p>
+          <p>{name}</p>
 
           <div className='cart-item-options'>
             <div className="add-or-remove-quantity-items">
-              <button><Minus size={14}/></button>
-              <span>1</span>
-              <button><Plus size={14}/></button>
+              <button type='button' onClick={() => addCoffeeQuantity()}><Minus size={14}/></button>
+              <span>{quantityDisplay}</span>
+              <button type='button' onClick={() => removeCoffeeQuantity()}><Plus size={14}/></button>
             </div>
 
             <button className='remove-item-cart'>
@@ -32,7 +47,7 @@ export function CartCard(/*{ image, name, price }: CartCardProps*/){
         </div>
 
       <div className='cart-item-price'>
-        <strong>R$ 9,90</strong>
+      <strong>R$ {price}</strong>
       </div>
     </CardCardContainer>
   )

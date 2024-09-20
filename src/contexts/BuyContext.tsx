@@ -1,4 +1,4 @@
-import { createContext, ReactNode, useState } from "react";
+import { createContext, ReactNode, useContext, useState } from "react";
 
 interface BuyContextProviderProps {
   children: ReactNode
@@ -10,7 +10,7 @@ interface CoffeeData {
   name: string
   description: string
   price: string 
-  quantity: number
+  quantity: number | 1
 }
 
 interface AddressDelivery {
@@ -26,12 +26,15 @@ interface AddressDelivery {
 interface BuyContextType {
   addressDelivery: AddressDelivery
   addCoffeeToCart: (coffee: CoffeeData) => void
-  coffees: CoffeeData[]
+  coffeesSelected: CoffeeData[]
+  amountOfCoffeesToAdd: number,
+  handleAddCoffeeToCart: () => void
+  handleRemoveCoffeeToCart: () => void
 }
 
 export const BuyContext = createContext({} as BuyContextType)
 
-export function BuyContextProvider({children}: BuyContextProviderProps) {
+function BuyContextProvider({children}: BuyContextProviderProps) {
   const [coffeesSelected, setCoffeesSelected] = useState<CoffeeData[]>([])
   const [addressDelivery, setAddressDelivery] = useState<AddressDelivery>({
     cep: 0,
@@ -41,6 +44,19 @@ export function BuyContextProvider({children}: BuyContextProviderProps) {
     streetNumber: 0,
     uf: "",
   })
+  const [ amountOfCoffeesToAdd, setAmountOfCoffeesToAdd ] = useState(1)
+  
+  function handleAddCoffeeToCart(){
+    if(amountOfCoffeesToAdd < 10){
+      setAmountOfCoffeesToAdd(prevstate => prevstate + 1)
+    }
+  }
+
+  function handleRemoveCoffeeToCart(){
+    if(amountOfCoffeesToAdd > 1) {
+      setAmountOfCoffeesToAdd(prevstate => prevstate - 1)
+    }
+  }
 
   function addCoffeeToCart(data: CoffeeData){
     const newCoffee: CoffeeData = {
@@ -58,9 +74,24 @@ export function BuyContextProvider({children}: BuyContextProviderProps) {
   return(
     <BuyContext.Provider value={{
       addressDelivery,
-      addCoffeeToCart
+      addCoffeeToCart,
+      coffeesSelected,
+      handleAddCoffeeToCart,
+      handleRemoveCoffeeToCart,
+      amountOfCoffeesToAdd
     }}>
       {children}
     </BuyContext.Provider>
   )
+}
+
+function useBuy(){
+  const context = useContext(BuyContext)
+
+  return context
+}
+
+export {
+  useBuy,
+  BuyContextProvider
 }

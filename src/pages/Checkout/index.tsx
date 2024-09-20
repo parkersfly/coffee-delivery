@@ -7,6 +7,7 @@ import { useForm } from "react-hook-form";
 import { zodResolver } from '@hookform/resolvers/zod'
 import * as zod from 'zod'
 import { useState } from "react";
+import { useBuy } from "../../contexts/BuyContext";
 
 const newAddressDeliveryFormValidationSchema = zod.object({
   cep: zod
@@ -36,6 +37,8 @@ interface AddressDelivery {
 }
 
 export function Checkout(){
+  const { coffeesSelected } = useBuy()
+
   const [addressDelivery, setAddressDelivery] = useState<AddressDelivery>({
     cep: 0,
     street: "",
@@ -142,8 +145,11 @@ export function Checkout(){
           <strong>Cafés selecionados</strong>
 
           <section className="cart">
-            <CartCard />
-            <CartCard />
+            {coffeesSelected.map((coffee) => {
+              return (
+                <CartCard data={coffee}/>
+              )
+            })}
 
             <div className="cart-info">
               <div className="cart-price-info">
