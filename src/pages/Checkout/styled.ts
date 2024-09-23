@@ -215,6 +215,27 @@ export const CheckoutContainer = styled.div`
     }
   }
 
+  .empty-cart-message {
+    height: 10rem;
+
+    display: flex;
+    justify-content: center;
+    align-items: center;
+
+    text-align: center;
+
+    border-bottom: 1px solid #C6C6C6;
+
+    > p {
+      font-family: 'Baloo 2', sans-serif;
+      font-size: 1.8rem;
+      
+      svg {
+        font-size: 1rem;
+      }
+    }
+  }
+
   .cart-info {
     display: flex;
     flex-direction: column;

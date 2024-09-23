@@ -8,6 +8,7 @@ import { zodResolver } from '@hookform/resolvers/zod'
 import * as zod from 'zod'
 import { useState } from "react";
 import { useBuy } from "../../contexts/BuyContext";
+import { Coffee } from "lucide-react";
 
 const newAddressDeliveryFormValidationSchema = zod.object({
   cep: zod
@@ -145,11 +146,17 @@ export function Checkout(){
           <strong>Cafés selecionados</strong>
 
           <section className="cart">
-            {coffeesSelected.map((coffee) => {
+            {coffeesSelected && coffeesSelected.map((coffee) => {
               return (
                 <CartCard data={coffee}/>
               )
             })}
+
+            {coffeesSelected.length === 0 && (
+              <div className="empty-cart-message">
+                <p>Ops...nada por aqui. Adicione um café para melhorar o seu dia! <Coffee size={16}/></p>      
+              </div>
+            )}
 
             <div className="cart-info">
               <div className="cart-price-info">

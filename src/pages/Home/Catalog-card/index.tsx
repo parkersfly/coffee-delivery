@@ -4,6 +4,7 @@ import { useBuy } from '../../../contexts/BuyContext'
 import { useState } from 'react'
 
 interface CardProps {
+  id: number
   name: string
   description: string
   type: string[]
@@ -11,14 +12,22 @@ interface CardProps {
   image: string
 }
 
-export function Card({ name, description, image, type, price, ...rest }:CardProps){
-  const { amountOfCoffeesToAdd ,addCoffeeToCart, handleAddCoffeeToCart, handleRemoveCoffeeToCart } = useBuy()
-  const [ coffeeQuantity, setCoffeeQuantity] = useState(amountOfCoffeesToAdd)
+export function Card({ id, name, description, image, type, price, ...rest }:CardProps){
+  const { addCoffeeToCart } = useBuy()
 
-  function add(){
-    setCoffeeQuantity(prev => prev + 1)
-  }
+  const [ amountOfCoffeesToAdd, setAmountOfCoffeesToAdd ] = useState(1)
   
+  function handleAddCoffeeToCart(){
+    if(amountOfCoffeesToAdd < 10){
+      setAmountOfCoffeesToAdd(prevstate => prevstate + 1)
+    }
+  }
+
+  function handleRemoveCoffeeToCart(){
+    if(amountOfCoffeesToAdd > 1) {
+      setAmountOfCoffeesToAdd(prevstate => prevstate - 1)
+    }
+  }
   
   return(
     <CardContainer>
@@ -44,11 +53,11 @@ export function Card({ name, description, image, type, price, ...rest }:CardProp
         <div className="buy">
           <div className="buy-count">
             <button onClick={() => handleRemoveCoffeeToCart()}><Minus size={14}/></button>
-            <span>{coffeeQuantity}</span>
-            <button onClick={() => add()}><Plus size={14}/></button>
+            <span>{amountOfCoffeesToAdd}</span>
+            <button onClick={() => handleAddCoffeeToCart()}><Plus size={14}/></button>
           </div>
 
-          <button onClick={() => addCoffeeToCart({name, description, image, price, tags: type, quantity: amountOfCoffeesToAdd})} {...rest}>
+          <button onClick={() => addCoffeeToCart({id, name, description, image, price, tags: type, quantity: amountOfCoffeesToAdd})} {...rest}>
             <ShoppingCart size={22} fill="#F3F2F2" weight="fill"/>
           </button>
         </div>

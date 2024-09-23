@@ -58,6 +58,7 @@ export function Home() {
           return (
             <Card 
             key={id} 
+            id={id}
             name={name} 
             description={description} 
             image={image} 

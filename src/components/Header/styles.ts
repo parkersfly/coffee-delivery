@@ -25,4 +25,30 @@ export const HeaderContainer = styled.header`
       background-color: ${({ theme }) => theme["yellow-light"]};
     }
   }
+
+  .cart {
+    position: relative;
+
+    > span {
+      content: '';
+
+      font-size: 1.2rem;
+      font-weight: bold;
+      color: ${({ theme }) => theme.white};
+      
+      display: flex;
+      justify-content: center;
+      align-items: center;
+
+      position: absolute;
+      right: -7px;
+      top: -7px;
+
+      width: 2rem;
+      height: 2rem;
+
+      background-color: ${({ theme }) => theme["yellow-dark"]};
+      border-radius: 9999px;
+    }
+  }
 `
