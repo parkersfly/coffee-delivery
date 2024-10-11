@@ -8,12 +8,16 @@ interface CardProps {
   name: string
   description: string
   type: string[]
-  price: string
+  price: number
   image: string
 }
 
 export function Card({ id, name, description, image, type, price, ...rest }:CardProps){
   const { addCoffeeToCart } = useBuy()
+
+  const priceHasTwoDecimalPlaces = price.toFixed(2)
+
+  const priceToDisplay = String(priceHasTwoDecimalPlaces).replace('.', ',')
 
   const [ amountOfCoffeesToAdd, setAmountOfCoffeesToAdd ] = useState(1)
   
@@ -48,7 +52,7 @@ export function Card({ id, name, description, image, type, price, ...rest }:Card
       
 
       <div className="price">
-        <span>R$ <strong>{price}</strong></span>
+        <span>R$ <strong>{priceToDisplay}</strong></span>
 
         <div className="buy">
           <div className="buy-count">

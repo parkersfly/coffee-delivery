@@ -6,7 +6,6 @@ import { useNavigate } from "react-router-dom";
 import { useForm } from "react-hook-form";
 import { zodResolver } from '@hookform/resolvers/zod'
 import * as zod from 'zod'
-import { useState } from "react";
 import { useBuy } from "../../contexts/BuyContext";
 import { Coffee } from "lucide-react";
 
@@ -27,27 +26,8 @@ const newAddressDeliveryFormValidationSchema = zod.object({
 
 type NewAddressDeliveryFormData = zod.infer<typeof newAddressDeliveryFormValidationSchema>
 
-interface AddressDelivery {
-  cep: number,
-  street: string,
-  streetNumber: number,
-  complement?: string,
-  neighborhood: string,
-  city: string,
-  uf: string,
-}
-
 export function Checkout(){
-  const { coffeesSelected } = useBuy()
-
-  const [addressDelivery, setAddressDelivery] = useState<AddressDelivery>({
-    cep: 0,
-    street: "",
-    streetNumber: 0,
-    neighborhood: "",
-    city: "",
-    uf: "",
-  })
+  const { coffeesSelected, addAddressToDelivery, addMethodPayment , totalPrice, resetCoffeesInCart } = useBuy()
 
   const { register, handleSubmit, reset } = useForm<NewAddressDeliveryFormData>({
     resolver: zodResolver(newAddressDeliveryFormValidationSchema),
@@ -55,12 +35,12 @@ export function Checkout(){
 
   const navigate = useNavigate()
 
-  function handleNextToPageSuccess() {
+  function handleToPageSuccess() { 
     navigate("/success")
   }
 
   function handleAddNewAddress(data: NewAddressDeliveryFormData){
-    const newAddressDelivery: AddressDelivery = {
+    const newAddressDelivery = {
       cep: data.cep,
       city: data.city,
       neighborhood: data.neighborhood,
@@ -70,10 +50,17 @@ export function Checkout(){
       complement: data.complement,
     }
 
-    setAddressDelivery(newAddressDelivery)
+    addAddressToDelivery(newAddressDelivery)
     
     reset()
+
+    resetCoffeesInCart()
+
+    handleToPageSuccess()
   }
+
+  let totalCoffeePriceDisplay = totalPrice.toFixed(2).replace('.', ',')
+  const totalCoffeeAndDeliveryPriceDisplay = (totalPrice + 3.50).toFixed(2).replace('.', ',')
 
   return (
     <CheckoutContainer>
@@ -122,19 +109,19 @@ export function Checkout(){
 
             <div className="payment-options">
               <div className="payment-option">
-                <input type="radio" name="payment-option" value="credit-card"/>
+                <input type="radio" name="payment-option" value="credit-card" onClick={(e) => addMethodPayment(e.target.value)}/>
                 <CreditCard size={16}/>
                 <span>Cartão de crédito</span>
               </div>
 
               <div className="payment-option">
-                <input type="radio" name="payment-option" value="debit-card"/>
+                <input type="radio" name="payment-option" value="debit-card" onClick={(e) => addMethodPayment(e.target.value)}/>
                 <Bank size={16}/>
                 <span>cartão de débito</span>
               </div>
 
               <div className="payment-option">
-                <input type="radio" name="payment-option" value="money"/>
+                <input type="radio" name="payment-option" value="money" onClick={(e) => addMethodPayment(e.target.value)}/>
                 <Money size={16}/>
                 <span>dinheiro</span>
               </div>
@@ -148,7 +135,8 @@ export function Checkout(){
           <section className="cart">
             {coffeesSelected && coffeesSelected.map((coffee) => {
               return (
-                <CartCard data={coffee}/>
+                <CartCard 
+                data={coffee} />
               )
             })}
 
@@ -161,7 +149,7 @@ export function Checkout(){
             <div className="cart-info">
               <div className="cart-price-info">
                 <span>Total de itens</span>
-                <span>R$ 29,70</span>
+                <span>R$ {totalCoffeePriceDisplay}</span>
               </div>
 
               <div className="cart-price-info">
@@ -171,11 +159,11 @@ export function Checkout(){
 
               <div className="cart-price-info"> 
                 <strong>Total</strong>
-                <strong>R$ 33,20</strong>
+                <strong>R$ {totalCoffeeAndDeliveryPriceDisplay}</strong>
               </div>
             </div>
 
-            <button type="submit" >CONFIRMAR PEDIDO</button>
+            <button type="submit">CONFIRMAR PEDIDO</button>
           </section>
         </div>
       </form>

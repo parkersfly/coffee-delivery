@@ -3,8 +3,31 @@ import { SuccessContainer } from "./styles";
 import { Icon } from "../../components/Icon";
 
 import delivery from '../../assets/delivery.png'
+import { useBuy } from "../../contexts/BuyContext";
 
 export function Success(){
+  const { addressDelivery, methodPaymentSelected } = useBuy() 
+
+  const { street, streetNumber, neighborhood, city, uf } = addressDelivery
+
+  function methodPaymentFormatedForText(methodPayment: string){
+    switch(methodPayment) {
+      case 'credit-card':
+        return "Cartão de Crédito";
+
+      case 'debit-card':
+        return "Cartão de Débito";
+
+      case 'money':
+        return "Dinheiro";
+
+      default: 
+        return "Dinheiro";
+    }
+  }
+
+  const methodPaymentFormated = methodPaymentFormatedForText(methodPaymentSelected)
+
   return (
     <SuccessContainer>
       <div className="order-confirmed">
@@ -18,7 +41,7 @@ export function Success(){
             <Icon iconSVG={MapPin} weight="fill"/>
 
             <div>
-              <p>Entrega em <span>Rua João Daniel Martinelli, 102</span> Farrapos - Porto Alegre, RS</p>
+              <p>Entrega em <span>{street}, {streetNumber}</span> {neighborhood} - {city}, {uf}</p>
             </div>
           </div>
 
@@ -36,7 +59,7 @@ export function Success(){
 
             <div>
               <p>Pagamento na entrega</p>
-              <span>Cartão de Crédito</span>
+              <span>{methodPaymentFormated}</span>
             </div>
           </div>
         </div>

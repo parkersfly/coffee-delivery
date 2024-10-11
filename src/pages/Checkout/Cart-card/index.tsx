@@ -1,6 +1,6 @@
 import { Minus, Plus, Trash } from '@phosphor-icons/react'
 import { CardCardContainer } from './styles'
-import { useState } from 'react'
+import { useEffect, useReducer, useState } from 'react'
 import { useBuy } from '../../../contexts/BuyContext'
 
 interface CartCardProps {
@@ -8,7 +8,7 @@ interface CartCardProps {
     id: number
     image: string
     name: string
-    price: string
+    price: number
     quantity: number
   }
 }
@@ -16,10 +16,20 @@ interface CartCardProps {
 export function CartCard({ data }: CartCardProps){
   const { id, image, name, price, quantity } = data
 
-  const { removeCoffeeFromCart } = useBuy()
-
   const [quantityDisplay, setQuantityDisplay] = useState(quantity)
 
+  const [coffeePrice, setCoffeePrice] = useState("")
+
+  const { removeCoffeeFromCart, updateCoffeeCart } = useBuy()
+
+  useEffect(() => {
+    const sumCoffeePriceXQuantity = (price * quantityDisplay).toFixed(2).replace(".", ",")
+
+    updateCoffeeCart(id, quantityDisplay)
+
+    setCoffeePrice(sumCoffeePriceXQuantity)
+  }, [quantityDisplay])
+  
   function addCoffeeQuantity(){
     if(quantityDisplay < 10){
       setQuantityDisplay(prevState => prevState + 1)
@@ -54,7 +64,7 @@ export function CartCard({ data }: CartCardProps){
         </div>
 
       <div className='cart-item-price'>
-      <strong>R$ {price}</strong>
+      <strong>R$ {coffeePrice}</strong>
       </div>
     </CardCardContainer>
   )

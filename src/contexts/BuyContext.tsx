@@ -1,17 +1,17 @@
-import { createContext, ReactNode, useContext, useState } from "react";
+import { createContext, ReactNode, useContext, useEffect, useReducer, useState } from "react";
 import Swal from 'sweetalert2'
 
 interface BuyContextProviderProps {
   children: ReactNode
 }
 
-interface CoffeeData {
+interface Coffee {
   id: number
   image: string
   tags: string[]
   name: string
   description: string
-  price: string 
+  price: number 
   quantity: number | 1
 }
 
@@ -26,16 +26,48 @@ interface AddressDelivery {
 }
 
 interface BuyContextType {
+  coffeesSelected: Coffee[]
   addressDelivery: AddressDelivery
-  addCoffeeToCart: (coffee: CoffeeData) => void
-  coffeesSelected: CoffeeData[]
+  methodPaymentSelected: string
+  totalPrice: number
+  addCoffeeToCart: (coffee: Coffee) => void
+  addMethodPayment: (methodPayment: string) => void
+  addAddressToDelivery: (data: AddressDelivery) => void
   removeCoffeeFromCart: (coffeeToRemove: number) => void
+  updateCoffeeCart: (id: number, newQuantity: number) => void
+  resetCoffeesInCart: () => void
 }
 
 export const BuyContext = createContext({} as BuyContextType)
 
 function BuyContextProvider({children}: BuyContextProviderProps) {
-  const [coffeesSelected, setCoffeesSelected] = useState<CoffeeData[]>([])
+  const [totalPrice, setTotalPrice] = useState(0)
+  const [coffeesSelected, dispatch] = useReducer((state: Coffee[], action: any) => {
+
+    if(action.type === 'Add_new_coffee') {
+      return [...state, action.payload.newCoffee]
+    }
+
+    if(action.type === 'Update_coffee_cart') {
+      return state.map(coffee => {
+        if (coffee.id === action.payload.id) {
+            return { ...coffee, quantity: action.payload.newQuantity }; 
+        }
+        return coffee;
+      });
+    }
+
+    if(action.type === 'Remove_coffee') {
+      return action.payload.newCart
+    }
+
+    if(action.type === "Reset_coffees_in_cart") {
+      return action.payload
+    }
+
+    return state
+  }, [])
+
   const [addressDelivery, setAddressDelivery] = useState<AddressDelivery>({
     cep: 0,
     street: "",
@@ -44,9 +76,10 @@ function BuyContextProvider({children}: BuyContextProviderProps) {
     streetNumber: 0,
     uf: "",
   })
+  const [methodPaymentSelected, setMethodPaymentSelected] = useState("money")
 
-  function addCoffeeToCart(data: CoffeeData){
-    const newCoffee: CoffeeData = {
+  function addCoffeeToCart(data: Coffee){
+    const newCoffee: Coffee = {
        id: data.id,
        name: data.name,
        description: data.description,
@@ -56,7 +89,7 @@ function BuyContextProvider({children}: BuyContextProviderProps) {
        tags: data.tags
     }
 
-    const coffeeAlreadySelected = coffeesSelected.some(coffee => coffee.id === data.id) 
+    const coffeeAlreadySelected = coffeesSelected.some((coffee: any) => coffee.id === data.id) 
 
     const Toast = Swal.mixin({
       toast: true,
@@ -86,36 +119,81 @@ function BuyContextProvider({children}: BuyContextProviderProps) {
       });
     }
 
-    setCoffeesSelected((state) => [...state, newCoffee])
+    dispatch({
+      type: "Add_new_coffee",
+      payload: {
+        newCoffee,
+      },
+    })
+  }
+
+  function updateCoffeeCart(id: number, newQuantity: number){
+      dispatch({
+        type: 'Update_coffee_cart',
+        payload: {
+          id, 
+          newQuantity
+        },
+      })
   }
 
   function removeCoffeeFromCart(coffeeToRemove: number){
-    const newCart = coffeesSelected.filter( coffees => coffees.id !== coffeeToRemove)
+    const newCart = coffeesSelected.filter((coffees: Coffee) => coffees.id !== coffeeToRemove)
 
-    setCoffeesSelected(newCart)
+    dispatch({
+      type: "Remove_coffee",
+      payload: {
+        newCart
+      }
+    })
   }
 
-  function sumTotalItems() {
-    const totalQuantity = coffeesSelected.reduce((accumulator, current) => {
-      const coffeePrice = parseInt(current.price, 10)
-      const coffeeQuantity = current.quantity
-
-      return (accumulator + coffeePrice) * coffeeQuantity;
-  }, 0);
-
-    // return totalQuantity
-    console.log(coffeesSelected)
-    console.log(totalQuantity)
+  function addAddressToDelivery(data: AddressDelivery){
+    setAddressDelivery(data)
   }
 
-  sumTotalItems()
+  function resetCoffeesInCart(){
+    setTotalPrice(0)
+
+    dispatch({
+      type: "Reset_coffees_in_cart",
+      payload: [],
+    })
+  }
+
+  function addMethodPayment(methodPayment: string){
+    setMethodPaymentSelected(methodPayment)
+  }
+
+  useEffect(() => {
+    function sumTotalCoffeesPrice() {
+      let total = 0;
+  
+      coffeesSelected.forEach(coffee => {
+          total += coffee.quantity * coffee.price;
+
+          setTotalPrice(total)
+      });
+
+      console.log(total)
+    }
+
+    sumTotalCoffeesPrice()
+
+  }, [coffeesSelected])
 
   return(
     <BuyContext.Provider value={{
       addressDelivery,
       addCoffeeToCart,
       coffeesSelected,
-      removeCoffeeFromCart
+      totalPrice,
+      updateCoffeeCart,
+      addAddressToDelivery,
+      removeCoffeeFromCart,
+      addMethodPayment,
+      methodPaymentSelected,
+      resetCoffeesInCart
     }}>
       {children}
     </BuyContext.Provider>
