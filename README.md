@@ -1,50 +1,35 @@
-# React + TypeScript + Vite
+## Coffee Delivery
 
-This template provides a minimal setup to get React working in Vite with HMR and some ESLint rules.
+https://coffeedelivery24hrs.netlify.app
 
-Currently, two official plugins are available:
+https://github.com/user-attachments/assets/b2aaf1fb-6abe-430a-ba9c-a0c706af65c8
 
-- [@vitejs/plugin-react](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react/README.md) uses [Babel](https://babeljs.io/) for Fast Refresh
-- [@vitejs/plugin-react-swc](https://github.com/vitejs/vite-plugin-react-swc) uses [SWC](https://swc.rs/) for Fast Refresh
+<br />
 
-## Expanding the ESLint configuration
+Coffee Delivery is one of the challenges presented in the React course from Rocketseat. <br />
+The task was to develop a fictional coffee shop and its features.
 
-If you are developing a production application, we recommend updating the configuration to enable type aware lint rules:
+<br />
 
-- Configure the top-level `parserOptions` property like this:
+## Funcionalidades
 
-```js
-export default tseslint.config({
-  languageOptions: {
-    // other options...
-    parserOptions: {
-      project: ['./tsconfig.node.json', './tsconfig.app.json'],
-      tsconfigRootDir: import.meta.dirname,
-    },
-  },
-})
-```
+- Listagem de produtos (cafés) disponíveis para compra
+- Adicionar uma quantidade específicas de itens no carrinho
+- Aumentar ou remover a quantidade de itens no carrinho
+- Formulário para o usuário preencher o seu endereço
+- Exibir o total de itens no carrinho no Header
+- Exibir o valor total da soma de itens no carrinho multiplicados pelo valor
 
-- Replace `tseslint.configs.recommended` to `tseslint.configs.recommendedTypeChecked` or `tseslint.configs.strictTypeChecked`
-- Optionally add `...tseslint.configs.stylisticTypeChecked`
-- Install [eslint-plugin-react](https://github.com/jsx-eslint/eslint-plugin-react) and update the config:
+<br />
 
-```js
-// eslint.config.js
-import react from 'eslint-plugin-react'
+## Stack utilizada
 
-export default tseslint.config({
-  // Set the react version
-  settings: { react: { version: '18.3' } },
-  plugins: {
-    // Add the react plugin
-    react,
-  },
-  rules: {
-    // other rules...
-    // Enable its recommended rules
-    ...react.configs.recommended.rules,
-    ...react.configs['jsx-runtime'].rules,
-  },
-})
-```
+- React
+- Typescript
+- Vite
+- Zod
+- Styled-components
+
+<br />
+
+:white_check_mark: Challenge solved in a completely original way
