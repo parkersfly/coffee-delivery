@@ -11,18 +11,18 @@ The task was to develop a fictional coffee shop and its features.
 
 <br />
 
-## Funcionalidades
+## Features
 
-- Listagem de produtos (cafés) disponíveis para compra
-- Adicionar uma quantidade específicas de itens no carrinho
-- Aumentar ou remover a quantidade de itens no carrinho
-- Formulário para o usuário preencher o seu endereço
-- Exibir o total de itens no carrinho no Header
-- Exibir o valor total da soma de itens no carrinho multiplicados pelo valor
+- Listing of products (coffees) available for purchase
+- Add a specific quantity of items to the cart
+- Increase or remove the quantity of items in the cart
+- Form for the user to fill in their address
+- Display the total number of items in the cart in the header
+- Display the total value of the sum of items in the cart multiplied by their price
 
 <br />
 
-## Stack utilizada
+## Stack 
 
 - React
 - Typescript
