@@ -4,7 +4,7 @@ import heroPattern from '../../assets/hero-pattern.png'
 
 export const HomeContainer = styled.div`
   > section {
-    padding: 3.2rem 0 15.7rem;
+    padding: 3.2rem 0 20rem;
 
     .coffees-catalog {
       width: 100%;
