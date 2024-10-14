@@ -18,7 +18,7 @@ interface Coffee {
 interface AddressDelivery {
   cep: number,
   street: string,
-  streetNumber: number,
+  streetNumber: number | undefined,
   complement?: string,
   neighborhood: string,
   city: string,
@@ -76,6 +76,7 @@ function BuyContextProvider({children}: BuyContextProviderProps) {
     streetNumber: 0,
     uf: "",
   })
+  
   const [methodPaymentSelected, setMethodPaymentSelected] = useState("money")
 
   function addCoffeeToCart(data: Coffee){
@@ -140,6 +141,8 @@ function BuyContextProvider({children}: BuyContextProviderProps) {
   function removeCoffeeFromCart(coffeeToRemove: number){
     const newCart = coffeesSelected.filter((coffees: Coffee) => coffees.id !== coffeeToRemove)
 
+    setTotalPrice(0)
+
     dispatch({
       type: "Remove_coffee",
       payload: {
@@ -169,7 +172,7 @@ function BuyContextProvider({children}: BuyContextProviderProps) {
     function sumTotalCoffeesPrice() {
       let total = 0;
   
-      coffeesSelected.forEach(coffee => {
+      coffeesSelected.forEach((coffee: Coffee) => {
           total += coffee.quantity * coffee.price;
 
           setTotalPrice(total)

@@ -1,6 +1,6 @@
 import { Minus, Plus, Trash } from '@phosphor-icons/react'
 import { CardCardContainer } from './styles'
-import { useEffect, useReducer, useState } from 'react'
+import { useEffect, useState } from 'react'
 import { useBuy } from '../../../contexts/BuyContext'
 
 interface CartCardProps {

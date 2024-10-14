@@ -8,25 +8,27 @@ import { zodResolver } from '@hookform/resolvers/zod'
 import * as zod from 'zod'
 import { useBuy } from "../../contexts/BuyContext";
 import { Coffee } from "lucide-react";
+import { useEffect, useState } from "react";
 
 const newAddressDeliveryFormValidationSchema = zod.object({
-  cep: zod
-  .number({
+  cep: zod.number({
     required_error: "É obrigatório informar o CEP",
     invalid_type_error: "CEP must be a number",
-  })
-  .min(8, { message: "Informe os 8 dígitos do CEP" }),
-  street: zod.string().min(1, "Informe o nome da rua"),
-  streetNumber: zod.number().min(1),
+  }).int().refine(value => value >= 10000000 && value <= 99999999, { message: "Informe os 8 dígitos do CEP" }),
+  street: zod.string().min(5, "Informe o nome da rua"),
+  streetNumber: zod.number().min(1).optional(),
   complement: zod.string().optional(),
-  neighborhood: zod.string().min(1),
-  city: zod.string().min(1),
-  uf: zod.string().min(2)
+  neighborhood: zod.string().min(4),
+  city: zod.string().min(4),
+  uf: zod.string().min(2).toUpperCase()
 })
 
 type NewAddressDeliveryFormData = zod.infer<typeof newAddressDeliveryFormValidationSchema>
 
 export function Checkout(){
+  const [totalCoffeePriceDisplay, setTotalCoffeePriceDisplay] = useState("")
+  const [totalCoffeeAndDeliveryPriceDisplay, setTotalCoffeeAndDeliveryPriceDisplay] = useState("")
+
   const { coffeesSelected, addAddressToDelivery, addMethodPayment , totalPrice, resetCoffeesInCart } = useBuy()
 
   const { register, handleSubmit, reset } = useForm<NewAddressDeliveryFormData>({
@@ -59,8 +61,19 @@ export function Checkout(){
     handleToPageSuccess()
   }
 
-  let totalCoffeePriceDisplay = totalPrice.toFixed(2).replace('.', ',')
-  const totalCoffeeAndDeliveryPriceDisplay = (totalPrice + 3.50).toFixed(2).replace('.', ',')
+  function handleAddNewMethodPayment(e: React.MouseEvent<HTMLInputElement>){
+    const target = e.currentTarget as HTMLInputElement;
+    addMethodPayment(target.value);
+  }
+
+  useEffect(() => {
+    const totalCoffeePriceFormated = totalPrice.toFixed(2).replace('.', ',')
+    setTotalCoffeePriceDisplay(totalCoffeePriceFormated)
+
+    const totalCoffeeAndDeliveryPriceFormated = (totalPrice + 3.50).toFixed(2).replace('.', ',')
+    setTotalCoffeeAndDeliveryPriceDisplay(totalCoffeeAndDeliveryPriceFormated)
+
+  }, [totalPrice])
 
   return (
     <CheckoutContainer>
@@ -84,6 +97,7 @@ export function Checkout(){
 
               <div className="wrapper1">
                 <input type="number" placeholder="Número" {...register("streetNumber", { valueAsNumber: true })}/>
+
                 <div>
                   <input type="text" placeholder="Complemento" {...register("complement")}/>
                   <span>Opcional</span>
@@ -109,19 +123,19 @@ export function Checkout(){
 
             <div className="payment-options">
               <div className="payment-option">
-                <input type="radio" name="payment-option" value="credit-card" onClick={(e) => addMethodPayment(e.target.value)}/>
+                <input type="radio" name="payment-option" value="credit-card" onClick={(e) => handleAddNewMethodPayment(e)}/>
                 <CreditCard size={16}/>
                 <span>Cartão de crédito</span>
               </div>
 
               <div className="payment-option">
-                <input type="radio" name="payment-option" value="debit-card" onClick={(e) => addMethodPayment(e.target.value)}/>
+                <input type="radio" name="payment-option" value="debit-card" onClick={(e) => handleAddNewMethodPayment(e)}/>
                 <Bank size={16}/>
                 <span>cartão de débito</span>
               </div>
 
               <div className="payment-option">
-                <input type="radio" name="payment-option" value="money" onClick={(e) => addMethodPayment(e.target.value)}/>
+                <input type="radio" name="payment-option" value="money" onClick={(e) => handleAddNewMethodPayment(e)}/>
                 <Money size={16}/>
                 <span>dinheiro</span>
               </div>
@@ -133,18 +147,21 @@ export function Checkout(){
           <strong>Cafés selecionados</strong>
 
           <section className="cart">
-            {coffeesSelected && coffeesSelected.map((coffee) => {
-              return (
-                <CartCard 
-                data={coffee} />
-              )
-            })}
-
-            {coffeesSelected.length === 0 && (
-              <div className="empty-cart-message">
-                <p>Ops...nada por aqui. Adicione um café para melhorar o seu dia! <Coffee size={16}/></p>      
-              </div>
-            )}
+            <div className="coffees-wrapper">
+              {coffeesSelected && coffeesSelected.map((coffee) => {
+                return (
+                    <CartCard 
+                    key={coffee.id}
+                    data={coffee} />
+                  )
+                })}
+            
+              {coffeesSelected.length === 0 && (
+                <div className="empty-cart-message">
+                  <p>Ops...nada por aqui. Adicione um café para melhorar o seu dia! <Coffee size={16}/></p>      
+                </div>
+              )}
+            </div>        
 
             <div className="cart-info">
               <div className="cart-price-info">

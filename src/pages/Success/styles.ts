@@ -1,13 +1,24 @@
 import styled from "styled-components";
 
 export const SuccessContainer = styled.div`
-  margin-top: 8rem;
   display: flex;
   gap: 10.2rem;
-  align-items: end;
 
-  > img {
-    object-fit: contain;
+  > div {
+    width: 100%;
+    max-width: 112rem;
+
+    display: flex;
+    align-items: start;
+    justify-content: space-between;
+
+    margin: 8rem auto 0;
+
+    > img {
+      width: 49.2rem;
+      object-fit: contain;
+      margin-top: 8.5rem;
+    }
   }
 
   .order-confirmed-title {

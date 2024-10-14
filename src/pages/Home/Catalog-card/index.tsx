@@ -38,9 +38,9 @@ export function Card({ id, name, description, image, type, price, ...rest }:Card
       <div className="coffeeIMG"><img src={image} alt="" /></div>
 
       <div className='tags-wrapper'>
-        {type.map((coffeeType) => {
+        {type.map((coffeeType, index) => {
           return(
-            <span>{coffeeType}</span>
+            <span key={index}>{coffeeType}</span>
           )
         })}
       </div>

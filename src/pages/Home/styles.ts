@@ -4,12 +4,18 @@ import heroPattern from '../../assets/hero-pattern.png'
 
 export const HomeContainer = styled.div`
   > section {
-    padding-bottom: 15.7rem;
+    padding: 3.2rem 0 15.7rem;
 
-    > h3 {
-      font-size: 3.2rem;
-      font-family: 'Baloo 2', sans-serif;
-      color: ${({ theme }) => theme["base-subtitle"]};
+    .coffees-catalog {
+      width: 100%;
+      max-width: 112rem; 
+      margin: 0 auto;
+
+      > h3 {
+        font-size: 3.2rem;
+        font-family: 'Baloo 2', sans-serif;
+        color: ${({ theme }) => theme["base-subtitle"]};
+      }
     }
 
     .cards-wrapper {
@@ -22,13 +28,22 @@ export const HomeContainer = styled.div`
 `
 
 export const HeroContainer = styled.div`
-    /* background-image: url(${heroPattern}); */
     height: 54.4rem;
     display: flex; 
     align-items: center;
     justify-content: space-between;
 
+    background-image: url(${heroPattern});
+
     > div {
+      width: 100%;
+      max-width: 112rem;
+      margin: 0 auto;
+      display: flex;
+      justify-content: space-between;
+    }
+
+    .hero {
       display: flex;
       flex-direction: column;
       gap: 6.6rem;

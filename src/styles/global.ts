@@ -17,6 +17,19 @@ export const GlobalStyle = createGlobalStyle`
     -webkit-text-size-adjust: 100%;
   }
 
+  ::-webkit-scrollbar {
+    width: 5px; 
+  }
+
+  ::-webkit-scrollbar-track {
+      background: #f1f1f1; 
+  }
+
+  ::-webkit-scrollbar-thumb {
+      background-color: #888;
+      border-radius: 10px; 
+  }
+
   :focus {
     outline: none;
     box-shadow: 0 0 0 2px ${({ theme }) => theme["yellow-dark"]};

@@ -4,6 +4,9 @@ export const CheckoutContainer = styled.div`
     margin-top: 4rem;
 
   > form {
+    width: 100%;
+    max-width: 112rem;
+    margin: 0 auto;
     display: flex;
     gap: 3.2rem;
   }
@@ -254,5 +257,17 @@ export const CheckoutContainer = styled.div`
       font-size: 2rem;
       color: ${({ theme }) => theme["base-subtitle"]};
     }
+  }
+
+  .coffees-wrapper {
+    height: 100%;
+    max-height: 31.5rem;
+
+    overflow-y: auto;
+    padding-right: 1rem;
+    
+    display: flex;
+    flex-direction: column;
+    gap: 2.4rem;
   }
 `
